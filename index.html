@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CampusVote - modern college election demo">
+  <title>CampusVote — Student Election 2026</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%97%B3%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="#" onclick="openTab('homeTab');return false;">
+    <span class="brand-mark">✓</span>
+    <span>Campus<span>Vote</span></span>
+  </a>
+  <nav>
+    <button class="nav-btn active" id="nav-homeTab" onclick="openTab('homeTab')">Home</button>
+    <button class="nav-btn" id="nav-voteTab" onclick="openTab('voteTab')">Vote</button>
+    <button class="nav-btn" id="nav-resultTab" onclick="openTab('resultTab')">Results</button>
+    <button class="nav-btn" id="nav-adminTab" onclick="openTab('adminTab')">Admin</button>
+  </nav>
+  <div class="top-status"><span class="status-dot"></span><span id="topStatus">Voting Open</span></div>
+</header>
+
+<section class="hero-banner">
+  <div class="hero-copy">
+    <span class="eyebrow">CAMPUS ELECTION 2026</span>
+    <h1 id="bannerTitle">Student Council Election 2026</h1>
+    <p>Choose the next <strong id="bannerPost">President</strong> of your student council.</p>
+    <div class="hero-meta">
+      <span id="statusBadge" class="badge">Voting Open</span>
+      <span>🔒 Secret ballot</span>
+      <span>⚡ Instant demo results</span>
+    </div>
+  </div>
+  <div class="hero-card">
+    <div class="live-ring"><span id="heroVotes">0</span></div>
+    <div><b>Votes cast</b><small>Live election activity</small></div>
+  </div>
+</section>
+
+<div class="demo-note">⚠️ <b>College demo project:</b> data is stored only in this browser using localStorage. This is not a real election system.</div>
+
+<main>
+<section id="homeTab" class="tab">
+  <div class="welcome-grid">
+    <div class="box hero-panel">
+      <span class="eyebrow">YOUR VOICE MATTERS</span>
+      <h2>Your vote. Your choice. Your campus.</h2>
+      <p>Verify your student details, select one candidate and confirm your choice. The demo keeps the voter record separate from the candidate choice.</p>
+      <div class="hero-btns">
+        <button class="main-btn" onclick="openTab('voteTab')">Cast your vote →</button>
+        <button class="main-btn outline" onclick="openTab('resultTab')">View results</button>
+      </div>
+    </div>
+    <div class="box quick-card">
+      <span class="mini-label">ELECTION STATUS</span>
+      <div class="big-status" id="homeStatus">Open</div>
+      <p id="homeStatusText">Voting is currently accepting ballots.</p>
+      <div class="progress"><span id="homeProgress"></span></div>
+      <small id="homeProgressText">0 votes recorded</small>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><span class="stat-icon">🗳️</span><p>Votes Cast</p><h2 id="homeVotes">0</h2></div>
+    <div class="stat"><span class="stat-icon">👥</span><p>Candidates</p><h2 id="homeCand">0</h2></div>
+    <div class="stat"><span class="stat-icon">🎓</span><p>Departments</p><h2 id="homeDept">0</h2></div>
+    <div class="stat"><span class="stat-icon">⏱️</span><p>Status</p><h2 id="homeStatus2">Open</h2></div>
+  </div>
+
+  <div class="box">
+    <div class="section-heading"><div><span class="eyebrow">SIMPLE PROCESS</span><h3>How voting works</h3></div></div>
+    <div class="how-grid">
+      <div class="how-card"><div class="how-icon">01</div><b>Verify</b><p>Enter your name, roll number, department and year.</p></div>
+      <div class="how-card"><div class="how-icon">02</div><b>Select</b><p>Review candidate profiles before making your choice.</p></div>
+      <div class="how-card"><div class="how-icon">03</div><b>Confirm</b><p>Press the vote button and review the VVPAT-style slip.</p></div>
+      <div class="how-card"><div class="how-icon">04</div><b>Done</b><p>Your voter record is marked as complete for this demo.</p></div>
+    </div>
+  </div>
+
+  <div class="box">
+    <div class="section-heading"><div><span class="eyebrow">MEET THE CANDIDATES</span><h3>Candidate profiles</h3></div></div>
+    <div id="homeCands" class="cand-grid"></div>
+    <p class="small">NOTA (None of the above) is always available on the ballot.</p>
+  </div>
+
+  <div class="box rules-box">
+    <h3>Election rules</h3>
+    <div class="rules-grid">
+      <div>✓ One vote per roll number</div>
+      <div>✓ Vote privately and independently</div>
+      <div>✓ Candidate choice is not stored with your voter profile</div>
+      <div>✓ Results can be hidden until the officer closes voting</div>
+    </div>
+  </div>
+</section>
+
+<section id="voteTab" class="tab hidden">
+  <div class="steps">
+    <div class="step active" id="step1"><b>1</b><span>Verify</span></div><div class="line"></div>
+    <div class="step" id="step2"><b>2</b><span>Vote</span></div><div class="line"></div>
+    <div class="step" id="step3"><b>3</b><span>Done</span></div>
+  </div>
+
+  <div id="verifyBox" class="box form-card">
+    <span class="eyebrow">STEP 1 OF 3</span><h2>Voter verification</h2>
+    <p class="muted">Use your college details to unlock the ballot.</p>
+    <div class="form-grid">
+      <div><label>Full Name</label><input type="text" id="vName" maxlength="30" placeholder="e.g. Rahul Sharma"></div>
+      <div><label>Roll Number</label><input type="text" id="vRoll" maxlength="15" placeholder="e.g. 23BCS045"></div>
+      <div><label>Department</label><select id="vDept"><option value="">Select department</option><option>CSE</option><option>IT</option><option>ECE</option><option>Mechanical</option><option>Biotech</option><option>Pharmacy</option><option>Management</option><option>Other</option></select></div>
+      <div><label>Year</label><select id="vYear"><option value="">Select year</option><option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option>4th Year</option></select></div>
+    </div>
+    <label class="check"><input type="checkbox" id="vAgree"> I am voting by myself and will vote only once.</label>
+    <button class="main-btn" onclick="verifyVoter()">Continue to ballot →</button>
+    <p id="verifyMsg" class="error"></p>
+  </div>
+
+  <div id="evmBox" class="box hidden">
+    <div class="ballot-header"><div><span class="eyebrow">STEP 2 OF 3</span><h2>Choose your candidate</h2></div><span class="ready"><i class="lamp green"></i> BALLOT READY</span></div>
+    <p id="voterInfo" class="voter-info"></p>
+    <div class="evm"><div class="evm-top"><span>STUDENT COUNCIL • PRESIDENT</span><span class="ready">● READY</span></div><div id="ballot"></div></div>
+    <p class="small center-text">Your selection will trigger a VVPAT-style confirmation slip.</p>
+  </div>
+
+  <div id="doneBox" class="box center hidden">
+    <div class="success-icon">✓</div><span class="eyebrow">BALLOT SUBMITTED</span>
+    <h2>Your vote has been recorded!</h2>
+    <p id="doneTime" class="small"></p>
+    <p class="secret">🔒 <b>Secret ballot:</b> the demo stores the voter record separately from the candidate selection.</p>
+    <div class="hero-btns"><button class="main-btn" onclick="openTab('homeTab')">Back to home</button><button class="main-btn outline" onclick="openTab('resultTab')">See results</button></div>
+  </div>
+
+  <div id="closedBox" class="box center hidden"><div class="lock-icon">🔒</div><h2>Voting is closed</h2><p class="small">The election officer has closed voting. Check the final result.</p><button class="main-btn" onclick="openTab('resultTab')">View final results</button></div>
+</section>
+
+<section id="resultTab" class="tab hidden">
+  <div id="resultLocked" class="box center hidden"><div class="lock-icon">🔒</div><h2>Results are hidden</h2><p class="small">Results will be announced after the election officer closes voting.</p><p>Votes cast so far: <b id="lockedVotes">0</b></p></div>
+  <div id="resultContent">
+    <div class="stats"><div class="stat"><p>Total Votes</p><h2 id="statVotes">0</h2></div><div class="stat"><p>Candidates</p><h2 id="statCand">0</h2></div><div class="stat"><p>Status</p><h2 id="statStatus">Open</h2></div></div>
+    <div id="winnerBox" class="winner"></div>
+    <div class="result-grid">
+      <div class="box"><h3>Vote share</h3><div class="pie-area"><div id="pie" class="pie"></div><div id="legend" class="legend"></div></div></div>
+      <div class="box"><h3>Ranking</h3><div id="bars"></div></div>
+    </div>
+    <div class="box"><h3>Voters by department</h3><div id="deptList"></div></div>
+  </div>
+</section>
+
+<section id="adminTab" class="tab hidden">
+  <div id="loginBox" class="box small-box login-card">
+    <span class="eyebrow">OFFICER ACCESS</span><h2>Admin login</h2><p class="small">Control the demo election from the dashboard.</p>
+    <label for="adminPass">Password</label><input type="password" id="adminPass" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')adminLogin()">
+    <label class="check"><input type="checkbox" id="showPass" onchange="togglePassView()"> Show password</label>
+    <button class="main-btn" onclick="adminLogin()">Login to dashboard</button><p id="loginMsg" class="error"></p><p id="passHint" class="hint"></p>
+  </div>
+
+  <div id="adminPanel" class="hidden">
+    <div class="admin-head box"><div><span class="eyebrow">CONTROL CENTER</span><h2>Election dashboard</h2><p class="small">Monitor turnout, candidates, voters and ballot verification.</p></div><button class="main-btn outline" onclick="adminLogout()">Logout</button></div>
+    <div class="sub-nav no-print">
+      <button class="sub-btn active" id="sub-ovPage" onclick="openAdminPage('ovPage')">📊 Overview</button>
+      <button class="sub-btn" id="sub-candPage" onclick="openAdminPage('candPage')">👤 Candidates</button>
+      <button class="sub-btn" id="sub-votersPage" onclick="openAdminPage('votersPage')">📋 Voters</button>
+      <button class="sub-btn" id="sub-boxPage" onclick="openAdminPage('boxPage')">📦 Ballot Box</button>
+      <button class="sub-btn" id="sub-logPage" onclick="openAdminPage('logPage')">🕘 Activity</button>
+      <button class="sub-btn" id="sub-setPage" onclick="openAdminPage('setPage')">⚙️ Settings</button>
+    </div>
+
+    <div id="ovPage" class="admin-page">
+      <div class="stats four"><div class="stat"><p>Votes Cast</p><h2 id="ovVotes">0</h2></div><div class="stat"><p>Candidates</p><h2 id="ovCand">0</h2></div><div class="stat"><p>Voting</p><h2 id="ovStatus">Open</h2></div><div class="stat"><p>Last Vote</p><h2 id="ovLast" class="stat-small">—</h2></div></div>
+      <div class="box no-print"><h3>Election control</h3><div class="control-btns"><button id="toggleBtn" class="main-btn" onclick="toggleVoting()">Close voting</button><button class="main-btn grey" onclick="nextVoter()">Allow next voter</button><button class="main-btn red" onclick="resetElection()">Reset demo</button></div><p id="adminMsg" class="small"></p></div>
+      <div id="checkBox" class="check-box"></div>
+      <div class="box"><div class="box-head"><h3>Live result</h3><div class="no-print"><button class="small-btn" onclick="downloadResults()">↓ Results CSV</button><button class="small-btn" onclick="window.print()">🖨 Print</button></div></div><div class="table-box"><table><thead><tr><th>Rank</th><th>Candidate</th><th>Symbol</th><th>Votes</th><th>Share</th><th class="bar-col"></th></tr></thead><tbody id="ovResultTable"></tbody></table></div></div>
+      <div class="result-grid"><div class="box"><h3>Turnout by department</h3><div id="ovDept"></div></div><div class="box"><h3>Turnout by year</h3><div id="ovYear"></div></div></div>
+      <div class="box"><h3>Votes by hour</h3><div id="ovHours"></div></div>
+    </div>
+
+    <div id="candPage" class="admin-page hidden"><div class="box"><h3>Candidates</h3><p class="small">Candidates can be added or removed before the first vote.</p><div id="candList"></div><div class="add-form"><input type="text" id="cName" maxlength="25" placeholder="Candidate name"><select id="cSymbol"><option>🌻</option><option>🏀</option><option>🎭</option><option>🚌</option><option>📚</option><option>🎸</option><option>💻</option><option>⭐</option></select><input type="text" id="cSlogan" maxlength="40" placeholder="Slogan / agenda"><button class="main-btn" onclick="addCandidate()">Add</button></div><p id="candMsg" class="small"></p></div></div>
+
+    <div id="votersPage" class="admin-page hidden"><div class="box"><div class="box-head"><h3>Voter list</h3><button class="small-btn" onclick="downloadVoters()">↓ Download CSV</button></div><div class="filter-bar"><input type="text" id="searchVoter" placeholder="Search name or roll no." oninput="renderVoters()"><select id="filterDept" onchange="renderVoters()"><option value="">All departments</option><option>CSE</option><option>IT</option><option>ECE</option><option>Mechanical</option><option>Biotech</option><option>Pharmacy</option><option>Management</option><option>Other</option></select><select id="filterYear" onchange="renderVoters()"><option value="">All years</option><option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option>4th Year</option></select></div><p id="voterCount" class="small"></p><div class="table-box"><table><thead><tr><th>#</th><th>Name</th><th>Roll No</th><th>Department</th><th>Year</th><th>Time</th></tr></thead><tbody id="voterTable"></tbody></table></div></div></div>
+
+    <div id="boxPage" class="admin-page hidden"><div class="box"><h3>VVPAT verification</h3><p class="small">The demo compares the generated slips with the recorded ballot count.</p><div class="table-box"><table><thead><tr><th>Candidate</th><th>Ballot Count</th><th>Slips</th><th>Match</th></tr></thead><tbody id="verifyTable"></tbody></table></div></div><div class="box"><h3>All slips in the box (<span id="slipTotal">0</span>)</h3><div id="slipGrid" class="slip-grid"></div></div></div>
+
+    <div id="logPage" class="admin-page hidden"><div class="box"><h3>Activity log</h3><p class="small">Newest events appear first.</p><div id="logList"></div></div></div>
+
+    <div id="setPage" class="admin-page hidden">
+      <div class="box"><h3>Election details</h3><div class="form-grid"><div><label>Election name</label><input type="text" id="setTitle" maxlength="50"></div><div><label>Post</label><input type="text" id="setPost" maxlength="30"></div></div><button class="main-btn" onclick="saveDetails()">Save details</button><p id="detailsMsg" class="small"></p></div>
+      <div class="box"><h3>Result visibility</h3><label class="check"><input type="checkbox" id="setLive" onchange="toggleLiveResults()"> Show live results while voting is open</label><p class="small">Turn this off to hide public results until voting is closed.</p></div>
+      <div class="box"><h3>Change admin password</h3><div class="form-grid"><div><label>Current password</label><input type="password" id="oldPass"></div><div></div><div><label>New password</label><input type="password" id="newPass" placeholder="At least 6 characters"></div><div><label>Confirm new password</label><input type="password" id="newPass2"></div></div><button class="main-btn" onclick="changePassword()">Change password</button><p id="passMsg" class="small"></p></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<div id="vvpat" class="overlay hidden"><div class="vvpat-box"><p class="vvpat-title">VVPAT</p><div class="slip"><p class="slip-no" id="slipNo"></p><p class="slip-symbol" id="slipSymbol"></p><p class="slip-name" id="slipName"></p><p class="slip-check">✓ YOUR CHOICE</p></div><p class="small" id="slipTimer"></p></div></div>
+<footer><span>CampusVote</span> · Student Council Election Demo · Built for learning</footer>
+<script src="script.js"></script>
+</body>
+</html>
